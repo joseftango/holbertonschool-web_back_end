@@ -1,22 +1,36 @@
 #!/usr/bin/env python3
-""" Module for testing client """
-from client import GithubOrgClient
+"""first unit test"""
 import unittest
-from parameterized import parameterized, parameterized_class
-import json
-from unittest.mock import patch
+from typing import Mapping, Sequence
+from parameterized import parameterized
+from unittest.mock import patch, PropertyMock
+from unittest import mock
+from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """GithubOrgClient class"""
+    """test github org client class"""
 
-    @parameterized.expand([
-        ("google",),
-        ("abc",)
-    ])
+    @parameterized.expand([("google"), ("abc")])
     @patch('client.get_json')
-    def test_org(self, input_org, mock_get_json):
-        """test_org method"""
-        class_test = GithubOrgClient(input_org)
-        class_test.org()
-        mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{input_org}")
+    def test_org(self, url, payload):
+        """test org class"""
+        self.assertEqual(GithubOrgClient(url).org, payload.return_value)
+        payload.assert_called_once()
+
+    @patch('client.get_json')
+    def test_public_repos(self, mocked_method):
+        '''test_public_repos'''
+        mock_payload = [{"name": "Microsoft"}, {"name": "Apple"}]
+        mocked_method.return_value = mock_payload
+
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mocked_public:
+            mocked_public.return_value = "world"
+            response = GithubOrgClient('test-org').public_repos()
+            self.assertEqual(response, ["Microsoft", "Apple"])
+            mocked_public.assert_called_once()
+
+
+if __name__ == '__main__':
+    unittest.main()
