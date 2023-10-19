@@ -13,11 +13,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2)
         ])
-
     def test_access_nested_map(self, nested_map, path, result):
         """test_access_nested_map method"""
         self.assertEqual(access_nested_map(nested_map, path), result)
-    
+
     @parameterized.expand([
         ({}, ("a",), "Key 'a' not found in the nested_map"),
         ({"a": 1}, ("a", "b"), "Key 'b' not found in the nested_map")
