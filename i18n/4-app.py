@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Basic Babel setup """
+""" Basic Babel setup vfdbfd bfdbfn  bfb dnb dgnbcnbgfn fgcn"""
 from flask import Flask, render_template, request
 from flask_babel import Babel, _
 
