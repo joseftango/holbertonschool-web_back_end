@@ -53,6 +53,7 @@ def count_calls(method: Callable = None) -> Callable:
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """call hystory"""
     @wraps(method)
@@ -68,13 +69,17 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
-def replay(self, method: Callable):
-    """replay"""
-    method_name = method.__qualname__
-    inputs = self._redis.lrange(f"{method_name}:inputs", 0, -1)
-    outputs = self._redis.lrange(f"{method_name}:outputs", 0, -1)
-
-    print(f"{method_name} was called {len(inputs)} times:")
-    for input_str, output in zip(inputs, outputs):
-        input_args = eval(input_str)
-        print(f"{method_name}({input_args}) -> {output}")
+def replay(method: Callable):
+    """ func """
+    key = method.__qualname__
+    input = key + ":inputs"
+    output = key + ":outputs"
+    redis = method.__self__._redis
+    count = redis.get(key).decode("utf-8")
+    print("{} was called {} times:".format(key, count))
+    lstIn = redis.lrange(input, 0, -1)
+    lstOut = redis.lrange(output, 0, -1)
+    zip = list(zip(lstIn, lstOut))
+    for k, v in zip:
+        attr, data = k.decode("utf-8"), v.decode("utf-8")
+        print("{}(*{}) -> {}".format(key, attr, data))
