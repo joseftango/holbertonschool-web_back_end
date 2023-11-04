@@ -3,6 +3,7 @@
 import redis
 import uuid
 from typing import Union, Callable
+from functools import wraps
 
 
 class Cache():
@@ -39,3 +40,14 @@ class Cache():
         except Exception:
             value = 0
         return value
+
+def count_calls(method: Callable = None) -> Callable:
+    """count_calls function"""
+    name = method.__qualname__
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """ wrapper function"""
+        self._redis.incr(name)
+        return method(self, *args, **kwargs)
+    return wrapper
