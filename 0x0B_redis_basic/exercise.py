@@ -41,6 +41,7 @@ class Cache():
             value = 0
         return value
 
+
 def count_calls(method: Callable = None) -> Callable:
     """count_calls function"""
     name = method.__qualname__
