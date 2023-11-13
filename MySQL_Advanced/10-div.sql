@@ -1,6 +1,6 @@
 -- script that creates a function SafeDiv that divides (and returns) the first by the second number
 DROP FUNCTION IF EXISTS SafeDiv;
-DELIMITER //
+DELIMITER $$
 CREATE FUNCTION SafeDiv(a INT, b INT)
 RETURNS FLOAT DETERMINISTIC
 BEGIN
@@ -11,5 +11,5 @@ BEGIN
         RETURN (a / b);
     END IF;
 END
-//
+$$
 DELIMITER ;
