@@ -1,5 +1,3 @@
-// 3-all.js
-
 import { createUser, uploadPhoto } from './utils';
 
 function handleProfileSignup() {
