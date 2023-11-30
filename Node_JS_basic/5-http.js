@@ -1,8 +1,9 @@
 const http = require('http');
-const process = require('process');
+
+const hostname = '127.0.0.1';
+const port = 1245;
 const countStudents = require('./3-read_file_async');
 
-const port = 1245;
 const filePath = process.argv[2];
 
 const promise = countStudents(filePath);
@@ -13,7 +14,7 @@ const app = http.createServer((req, res) => {
     res.setHeader('Content-Type', 'text/plain');
     promise.then((data) => {
       res.end(`This is the list of our students\n${data}`);
-    }).catch(() => { res.end('the list of our students is not available'); });
+    }).catch(() => { res.end('This is the list of our students\nCannot load the database'); });
   } else if (req.url === '/') {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -21,8 +22,4 @@ const app = http.createServer((req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log('...');
-});
-
-module.exports = app;
+module.exports = app.listen(port, hostname);
