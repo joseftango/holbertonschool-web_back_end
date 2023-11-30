@@ -4,19 +4,20 @@ const countStudents = require('./3-read_file_async');
 
 const port = 1245;
 const filePath = process.argv[2];
+
 const promise = countStudents(filePath);
 
 const app = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
   if (req.url === '/students') {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
     promise.then((data) => {
-      res.write(`This is the list of our students\n${data}`);
-      res.end();
+      res.end(`This is the list of our students\n${data}`);
     }).catch(() => { res.end('the list of our students is not available'); });
   } else if (req.url === '/') {
-    res.write('Hello Holberton School!');
-    res.end();
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello Holberton School!');
   }
 });
 
