@@ -7,7 +7,10 @@ describe('getPaymentTokenFromAPI', function() {
         getPaymentTokenFromAPI(true)
             .then((res) => {
                 expect(res).to.eql({ data: 'Successful response from the API' })
+				done();
             })
-        done();
+			.catch((error) => {
+				done(error);
+			  });		
     })
 })
