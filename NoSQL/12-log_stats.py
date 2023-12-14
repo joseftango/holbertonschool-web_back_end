@@ -3,35 +3,21 @@
 from pymongo import MongoClient
 
 
-def log_data() -> None:
-    """ provides some stats about Nginx logs stored in MongoDB """
-
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    db_nginx = client.logs.nginx
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-    client = MongoClient('mongodb://127.0.0.1:27017')
-    nginx = client.logs.nginx
+    count_logs = db_nginx.count_documents({})
+    print(f'{count_logs} logs')
 
-    print(
-        "{} logs".format(
-            nginx.count_documents({})
-        )
-    )
-
-    print("Methods:")
-
+    print('Methods:')
     for method in methods:
-        print(
-            "\tmethod {}: {}".format(
-                method, nginx.count_documents({'method': method})
-            )
-        )
+        count_method = db_nginx.count_documents({'method': method})
+        print(f'\tmethod {method}: {count_method}')
 
-    print(
-        "{} status check".format(
-            nginx.count_documents({'method': 'GET', 'path': '/status'})
-        )
+    check = db_nginx.count_documents(
+        {"method": "GET", "path": "/status"}
     )
 
-
-if __name__ == "__main__":
-    log_data()
+    print(f'{check} status check')
