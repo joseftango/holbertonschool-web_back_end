@@ -1,31 +1,43 @@
 #!/usr/bin/python3
-"""4-mru_cache"""
-from collections import OrderedDict
-from base_caching import BaseCaching
+""" MRUCache page """
+
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """MRUCache class"""
+    """ MRUCache class """
     def __init__(self):
+        """ initializing function """
+        self.timesKey = {}
+        self.time = 0
         super().__init__()
-        self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """put function"""
-        if key in self.cache_data:
-            self.cache_data.move_to_end(key)
+        """ put method """
         if key is not None and item is not None:
-            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                discarded_key = next(iter(self.cache_data.keys()))
-                print(f"DISCARD: {discarded_key}")
-                self.cache_data.popitem(last=False)
+            self.timesKey[key] = self.time
+            self.time += 1
             self.cache_data[key] = item
 
+        while len(self.cache_data) > BaseCaching.MAX_ITEMS:
+            discard_key = None
+            newer = self.time - 2
+
+            for _key, _value in self.timesKey.items():
+                if newer == _value:
+                    discard_key = _key
+                    break
+            del self.cache_data[discard_key]
+            del self.timesKey[discard_key]
+
+            print("DISCARD:", discard_key)
+
     def get(self, key):
-        """get function"""
-        if key is not None:
-            if key in self.cache_data:
-                value = self.cache_data[key]
-                self.cache_data.move_to_end(key)
-                return value
-        return None
+        """ get the cache item value """
+        if key is None or key not in self.cache_data:
+            return None
+
+        self.timesKey[key] = self.time
+        self.time += 1
+
+        return self.cache_data[key]
