@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """7-to_kv module"""
-from typing import Union, Callable
+from typing import Callable
 
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
