@@ -3,6 +3,6 @@
 from typing import Union, Tuple
 
 
-def to_kv(k: str, v: Union[int, float]) -> Tuple[int, str]:
+def to_kv(k: str, v: Union[int, float]) -> Tuple[str, float]:
     """creates a tuple of key value"""
     return k, v**2
