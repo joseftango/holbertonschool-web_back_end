@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
-"""8-make_multiplier"""
-from typing import Callable
+"""7-to_kv module"""
+from typing import Union, Callable
 
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
-    """Function make_multiplier"""
-
-    def multiplier_function(x: float) -> float:
-        """function multiplier_function"""
-        return x * multiplier
-    return multiplier_function
+    x: float = 2.22
+    return lambda multiplier: x*multiplier
