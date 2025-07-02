@@ -4,6 +4,7 @@ import asyncio
 import random
 from typing import AsyncGenerator
 
+
 async def async_generator() ->  AsyncGenerator:
     """asynchronous generator function that
     yields random float in each iteration"""
